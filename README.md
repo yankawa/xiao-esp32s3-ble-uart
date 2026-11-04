@@ -8,9 +8,33 @@ SchooMy ── UART / 115200bps ── XIAO ESP32-S3 ── BLE ── PC
 
 ファームウェアはXIAOに書き込みます。SchooMyに書き込まれているプログラムは変更しません。SchooMyではデータをシリアル出力するプログラムを動かしておく必要があります。
 
+## 前提条件とuvのインストール
+
+Bluetooth LE対応PC、Python 3.14以上、uvを使用します。uvはPythonと依存パッケージを管理するツールです。
+
+WindowsではPowerShellで次のコマンドを実行します。
+
+```powershell
+winget install --id=astral-sh.uv -e
+```
+
+インストール後はPowerShellを開き直し、uvが使えることを確認します。
+
+```powershell
+uv --version
+```
+
+Python 3.14が入っていない場合は、uvでインストールできます。
+
+```powershell
+uv python install 3.14
+```
+
+WinGetを使えない場合やmacOS・Linuxでのインストール方法は、[uv公式のインストール手順](https://docs.astral.sh/uv/getting-started/installation/)を参照してください。
+
 ## クイックスタート
 
-Python 3.14以上、uv、Bluetooth LE対応PCを使用します。
+プロジェクトのフォルダーで次のコマンドを実行します。
 
 ```powershell
 uv sync --locked
