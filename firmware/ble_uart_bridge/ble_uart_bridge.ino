@@ -8,7 +8,7 @@
 constexpr int RX_PIN = 44, TX_PIN = 43, DTR_PIN = 1;
 constexpr uint32_t UART_BAUD = 115200;
 constexpr bool DTR_ACTIVE_LOW = true;
-constexpr size_t BLE_PAYLOAD_SIZE = 20;  // 最小ATT MTU 23に対応。
+constexpr size_t BLE_PAYLOAD_SIZE = 20;  // ATT MTUが最小の23バイトでも送れる長さ。
 constexpr size_t UART_RX_BUFFER_SIZE = 4096;
 #define SERVICE_UUID "6e400001-b5a3-f393-e0a9-e50e24dcca9e"
 #define RX_UUID "6e400002-b5a3-f393-e0a9-e50e24dcca9e"
@@ -92,7 +92,7 @@ void forwardUartData() {
       delay(5);
     }
   } else {
-    // 未接続時のデータを、次回の接続で古い測定値として再送しない。
+    // 古い測定値を次の接続で送らないよう、未接続・通知無効時のデータは捨てる。
     for (size_t i = 0; i < 256 && target.available(); ++i) target.read();
   }
 }

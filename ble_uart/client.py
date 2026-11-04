@@ -1,4 +1,4 @@
-"""BLEの接続、通知表示、UARTへの送信。"""
+"""BLE機器への接続、受信データの表示、UARTへの送信。"""
 import asyncio
 import codecs
 from contextlib import suppress
@@ -15,7 +15,7 @@ from .terminal import read_command
 
 
 class Receiver:
-    """通知境界をまたぐUTF-8を復号し、受信量を記録する。"""
+    """BLE通知に分かれて届くUTF-8を文字に戻し、受信バイト数を数える。"""
 
     def __init__(self, hex_output: bool = False, output: TextIO | None = None):
         self.total_bytes = 0
@@ -52,7 +52,7 @@ async def find_device(address: str | None) -> BLEDevice:
 
 
 async def subscribe(client: BleakClient, receiver: Receiver) -> None:
-    """通知を登録し直し、取得できる場合はCCCDを表示する。"""
+    """BLE通知を登録し直し、読み取れた場合は通知設定の値を表示する。"""
     await client.start_notify(TX_UUID, receiver)
     await client.stop_notify(TX_UUID)
     await asyncio.sleep(0.2)
@@ -70,7 +70,7 @@ async def subscribe(client: BleakClient, receiver: Receiver) -> None:
 
 
 async def send_command(client: BleakClient, line: str, newline: str) -> bool:
-    """一行を送信する。終了コマンドの場合はFalseを返す。"""
+    """入力した一行に応じてデータやDTR設定を送る。/quitではFalseを返す。"""
     command = parse_command(line, newline)
     if command.kind is CommandKind.QUIT:
         return False
@@ -96,7 +96,7 @@ async def receive_session(client: BleakClient, receiver: Receiver, duration: flo
 
 
 async def interactive_session(client: BleakClient, newline: str) -> None:
-    """切断時には入力待ちも終了する。"""
+    """コマンド入力を受け付け、BLEが切断されたら入力待ちを終了する。"""
     print("送信: /dtr on | /dtr off | /hex 01 ff | /quit", flush=True)
     while client.is_connected:
         task = asyncio.create_task(read_command())

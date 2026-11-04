@@ -1,10 +1,10 @@
-"""BLEイベント処理を止めない端末入力。"""
+"""BLEの受信処理と並行して端末のキー入力を読み取る。"""
 import asyncio
 import sys
 
 
 async def read_command() -> str:
-    """Windowsではinput()による標準出力ロックを避けて一行読む。"""
+    """一行を読む。Windowsでは標準出力をロックするinput()を避ける。"""
     if sys.platform != "win32":
         return await asyncio.to_thread(input)
     import msvcrt

@@ -1,4 +1,4 @@
-"""BLE UART端末のコマンドライン入口。"""
+"""BLE UART端末のコマンドライン引数を読み取り、処理を起動する。"""
 import argparse
 import asyncio
 import math
