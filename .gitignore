@@ -1,0 +1,10 @@
+.venv/
+__pycache__/
+*.py[cod]
+build/
+.pytest_cache/
+.ruff_cache/
+.env
+.env.*
+!.env.example
+adapter-reference.jpg
